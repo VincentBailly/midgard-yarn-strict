@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "target": "ES2018",
+        "rootDir": "src",
+        "outDir": "lib",
+        "incremental": true,
+        "tsBuildInfoFile": "lib/.tsbuildinfo"
+    },
+    "files": ["src/index.ts"]
+}
