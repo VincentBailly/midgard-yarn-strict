@@ -1,12 +1,11 @@
 const { resolveAndFetch } = require("../../yraf");
 const { createDependencyGraph } = require("../../node-dependency-graph");
-const fs = require("fs");
+import * as fs from "fs";
 const path = require("path");
 import { installLocalStore } from "../../local-package-store";
 import type { Graph } from "../../local-package-store";
 
 resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
-  const workspaces = locationMap.filter((n) => n.isLocal).map((n) => n.name);
 
   locationMap.forEach((o) => {
     if (o.isLocal) {
@@ -24,7 +23,7 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
       resolutionMap[name]["*"] = version;
       n.isRoot = true;
     });
-
+/*
   fs.writeFileSync(
     "resolutionMap.json",
     JSON.stringify(resolutionMap, undefined, 2)
@@ -32,10 +31,15 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
   fs.writeFileSync(
     "locationMap.json",
     JSON.stringify(locationMap, undefined, 2)
-  );
+  );*/
+  const dirs = await fs.promises.readdir(".");
+  const oldStores: string[] = dirs.filter(o => o.startsWith(".store"));
+  let newStore = ".store";
+  while(oldStores.includes(newStore)) { newStore = newStore+'0'};
+
   const graph = createDependencyGraph(locationMap, resolutionMap, false);
 
-  fs.writeFileSync("graph.json", JSON.stringify(graph, undefined, 2));
+  //fs.writeFileSync("graph.json", JSON.stringify(graph, undefined, 2));
 
   const locationMapMap = new Map();
   const isLocalMap = new Map();
@@ -52,8 +56,8 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
       .set(o.version, o.location.replace(/.package\.json$/, ""));
   });
 
-  await fs.promises.rmdir(".store", { recursive: true });
-  await fs.promises.mkdir(".store");
+
+  await fs.promises.mkdir(newStore);
 
   const newGraph: Graph = {
     nodes: await Promise.all(
@@ -92,10 +96,10 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
     })),
   };
 
-  fs.writeFileSync("newGraph.json", JSON.stringify(newGraph, undefined, 2));
+  // fs.writeFileSync("newGraph.json", JSON.stringify(newGraph, undefined, 2));
 
-  await installLocalStore(newGraph, path.resolve(".store"), {
+  await Promise.all([installLocalStore(newGraph, path.resolve(newStore), {
     ignoreBinConflicts: true,
     filesToExclude: [".yarn-metadata.json", ".yarn-tarball.tgz"],
-  });
+  }), Promise.all(oldStores.map(store => fs.promises.rmdir(store, { recursive: true })))]);
 });
