@@ -2,7 +2,8 @@ const { resolveAndFetch } = require("../../yraf");
 const { createDependencyGraph } = require("../../node-dependency-graph");
 const fs = require("fs");
 const path = require("path");
-const { installLocalStore } = require("../../local-package-store");
+import { installLocalStore } from "../../local-package-store";
+import type { Graph } from "../../local-package-store";
 
 resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
   const workspaces = locationMap.filter((n) => n.isLocal).map((n) => n.name);
@@ -21,16 +22,8 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
         resolutionMap[name] = {};
       }
       resolutionMap[name]["*"] = version;
+      n.isRoot = true;
     });
-
-  locationMap.unshift({
-    name: "midgard-repo-root",
-    version: "1.0.0",
-    location: "C:\\tmp\\package.json",
-    dependencies: workspaces
-      .map((w) => ({ [w]: "*" }))
-      .reduce((prev, acc) => ({ ...acc, ...prev }), {}),
-  });
 
   fs.writeFileSync(
     "resolutionMap.json",
@@ -62,7 +55,7 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
   await fs.promises.rmdir(".store", { recursive: true });
   await fs.promises.mkdir(".store");
 
-  const newGraph = {
+  const newGraph: Graph = {
     nodes: await Promise.all(
       graph.nodes.map(async (n) => {
         let bins = undefined;
@@ -101,5 +94,8 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
 
   fs.writeFileSync("newGraph.json", JSON.stringify(newGraph, undefined, 2));
 
-  await installLocalStore(newGraph, path.resolve(".store"));
+  await installLocalStore(newGraph, path.resolve(".store"), {
+    ignoreBinConflicts: true,
+    filesToExclude: [".yarn-metadata.json", ".yarn-tarball.tgz"],
+  });
 });
