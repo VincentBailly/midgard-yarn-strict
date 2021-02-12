@@ -1,0 +1,1 @@
+# midgard-yarn-strict
