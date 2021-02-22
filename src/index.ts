@@ -54,6 +54,7 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
         let bins = undefined;
         const location = locationMapMap.get(n.name).get(n.version);
         const { name } = n;
+        // TODO: remove midgard assumption here
         const rawManifest =
           name === "midgard-repo-root"
             ? "{}"
