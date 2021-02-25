@@ -6,7 +6,6 @@ import { installLocalStore } from "local-package-store";
 import type { Graph } from "local-package-store";
 
 resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
-
   locationMap.forEach((o) => {
     if (o.isLocal) {
       o.peerDependencies = undefined;
@@ -24,9 +23,11 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
       n.isRoot = true;
     });
   const dirs = await fs.promises.readdir(".");
-  const oldStores: string[] = dirs.filter(o => o.startsWith(".store"));
+  const oldStores: string[] = dirs.filter((o) => o.startsWith(".store"));
   let newStore = ".store";
-  while(oldStores.includes(newStore)) { newStore = newStore+'0'};
+  while (oldStores.includes(newStore)) {
+    newStore = newStore + "0";
+  }
 
   const graph = createDependencyGraph(locationMap, resolutionMap, false);
 
@@ -44,7 +45,6 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
       .get(o.name)
       .set(o.version, o.location.replace(/.package\.json$/, ""));
   });
-
 
   await fs.promises.mkdir(newStore);
 
@@ -88,8 +88,13 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
 
   // fs.writeFileSync("newGraph.json", JSON.stringify(newGraph, undefined, 2));
 
-  await Promise.all([installLocalStore(newGraph, path.resolve(newStore), {
-    ignoreBinConflicts: true,
-    filesToExclude: [".yarn-metadata.json", ".yarn-tarball.tgz"],
-  }), Promise.all(oldStores.map(store => fs.promises.rmdir(store, { recursive: true })))]);
+  await Promise.all([
+    installLocalStore(newGraph, path.resolve(newStore), {
+      ignoreBinConflicts: true,
+      filesToExclude: [".yarn-metadata.json", ".yarn-tarball.tgz"],
+    }),
+    Promise.all(
+      oldStores.map((store) => fs.promises.rmdir(store, { recursive: true }))
+    ),
+  ]);
 });
