@@ -1,7 +1,7 @@
-const { resolveAndFetch } = require("yraf");
-const { createDependencyGraph } = require("node-dependency-graph");
+import { resolveAndFetch } from "yraf";
+import { createDependencyGraph } from "node-dependency-graph";
 import * as fs from "fs";
-const path = require("path");
+import * as path from "path";
 import { installLocalStore } from "local-package-store";
 import type { Graph } from "local-package-store";
 
