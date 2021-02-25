@@ -55,12 +55,9 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
         const location = locationMapMap.get(n.name).get(n.version);
         const { name } = n;
         // TODO: remove midgard assumption here
-        const rawManifest =
-          name === "midgard-repo-root"
-            ? "{}"
-            : (
-                await fs.promises.readFile(path.join(location, "package.json"))
-              ).toString();
+        const rawManifest = (
+          await fs.promises.readFile(path.join(location, "package.json"))
+        ).toString();
         const manifest = JSON.parse(rawManifest);
         if (manifest.bin) {
           if (typeof manifest.bin === "string") {
@@ -85,8 +82,6 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
       target: l.targetId.toString(),
     })),
   };
-
-  // fs.writeFileSync("newGraph.json", JSON.stringify(newGraph, undefined, 2));
 
   await Promise.all([
     installLocalStore(newGraph, path.resolve(newStore), {
