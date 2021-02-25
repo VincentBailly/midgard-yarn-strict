@@ -1,6 +1,6 @@
 {
   "name": "midgard-yarn-strict",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "NodeJS package manager based on yarn and pnpm",
   "bin": "./bin/index.js",
   "bundledDependencies": [
