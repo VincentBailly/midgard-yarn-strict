@@ -5,7 +5,8 @@ import * as path from "path";
 import { installLocalStore } from "local-package-store";
 import type { Graph } from "local-package-store";
 
-resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
+async function install(): Promise<void> {
+  const { resolutionMap, locationMap } = await resolveAndFetch();
   locationMap.forEach((o) => {
     if (o.isLocal) {
       o.peerDependencies = undefined;
@@ -92,4 +93,9 @@ resolveAndFetch().then(async ({ resolutionMap, locationMap }) => {
       oldStores.map((store) => fs.promises.rmdir(store, { recursive: true }))
     ),
   ]);
+}
+
+install().catch((e) => {
+  console.error(e);
+  process.exit(1);
 });
