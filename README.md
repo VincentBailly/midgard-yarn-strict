@@ -8,6 +8,8 @@ midgard-yarn-strict is a fork of [midgard-yarn](https://www.npmjs.com/package/mi
 
 - midgard-yarn-strict adds strictness, which is necessary for a more deterministic package installations.
 
+- Scoping, midgard-yarn-strict can install only the dependencies of a subset of the workspaces. (eg. `npx midgard-yarn-strict "build-tools-*"` will only install the dependencies needed by the workspaces with name starting by "build-tools-")
+
 ## Usage
 
 ### Install

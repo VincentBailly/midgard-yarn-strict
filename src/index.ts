@@ -6,7 +6,8 @@ import { installLocalStore } from "local-package-store";
 import type { Graph } from "local-package-store";
 
 async function install(): Promise<void> {
-  const { resolutionMap, locationMap } = await resolveAndFetch();
+  const scope = process.argv[2];
+  const { resolutionMap, locationMap } = await resolveAndFetch(scope);
   locationMap.forEach((o) => {
     if (o.isLocal) {
       o.peerDependencies = undefined;
@@ -21,7 +22,6 @@ async function install(): Promise<void> {
         resolutionMap[name] = {};
       }
       resolutionMap[name]["*"] = version;
-      n.isRoot = true;
     });
   const dirs = await fs.promises.readdir(".");
   const oldStores: string[] = dirs.filter((o) => o.startsWith(".store"));

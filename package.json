@@ -10,8 +10,8 @@
   ],
   "dependencies": {
     "local-package-store": "^1.3.2",
-    "node-dependency-graph": "^1.3.1",
-    "yraf": "^1.22.34"
+    "node-dependency-graph": "^2.0.0",
+    "yraf": "^1.22.35"
   },
   "devDependencies": {
     "@types/node": "^14.14.26",
