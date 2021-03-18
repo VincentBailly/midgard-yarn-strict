@@ -1,6 +1,6 @@
 {
   "name": "midgard-yarn-strict",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "NodeJS package manager based on yarn and pnpm",
   "bin": "./bin/index.js",
   "bundledDependencies": [
@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "local-package-store": "^1.3.2",
-    "node-dependency-graph": "^2.0.0",
+    "node-dependency-graph": "^2.0.1",
     "yraf": "^1.22.35"
   },
   "devDependencies": {
