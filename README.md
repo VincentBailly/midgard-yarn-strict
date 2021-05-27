@@ -22,6 +22,28 @@ $ npx midgard-yarn-strict
 
 The installation flags supported by yarn are not supported by the CLI but some are still supported via the yarn config file.
 
+### Configuration
+
+Most of the yarn configuration still works, but cli args don't work so using npmrc or yarnrc is necessary. 
+
+#### Package extensions
+
+Some packages forget to declare their dependencies and this can make these dependencies fail in strict mode. To work around the issue while the package owner publishes a fix version, the missing dependencies can be added locally.
+
+package.json:
+```javascript
+{
+  ///...
+  "packageExtensions": {
+    "webpack@*": {
+      "peerDependencies": {
+        "webpack-cli": "*"
+      }
+    }
+  }
+}
+```
+
 ### Upgrade or add a dependency
 
 Manual edits to the package.json files is the only current supported way to manage dependencies, no CLI tool is available yet.
