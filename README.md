@@ -38,6 +38,27 @@ The yarn-run command is not affected by midgard-yarn-strict, so you can still ru
 
 Strictness means that workspaces can only use the dependencies that they declare in their `package.json`. This makes the dependency management processes more predictable.
 
+## Configuration
+
+`midgard-yarn-strict` allows you to declare dependencies on behalf of external packages, this is useful when external packages forgot to declare all their dependencies.
+
+Example: package.json
+```javascript
+{
+  // rest of package.json
+  "extraDependencies": {
+    "webpack": {
+      "^4.0.0": {
+        "dependencies": {
+          "webpack-cli": "^4.0.0"
+        }
+      }
+    }
+  }
+}
+```
+
+
 ## Long term
 
 This package is meant as a stopgap solution while waiting for npm to support strictness.

@@ -1,4 +1,4 @@
-import { resolveAndFetch } from "yraf";
+import { resolveAndFetch } from "../../yraf/dist";
 import { createDependencyGraph } from "node-dependency-graph";
 import * as fs from "fs";
 import * as path from "path";
