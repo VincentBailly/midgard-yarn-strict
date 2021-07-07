@@ -2,7 +2,7 @@
 
 midgard-yarn-strict is a fork of [midgard-yarn](https://www.npmjs.com/package/midgard-yarn), which is itself a fork of [yarn v1](https://www.npmjs.com/package/yarn).
 
-## Improvments over yarn
+## Improvements over yarn
 
 - midgard-yarn improves reliability and performance of yarn for large repositories.
 
